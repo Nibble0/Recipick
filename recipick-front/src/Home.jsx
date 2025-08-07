@@ -340,19 +340,19 @@ export function Home() {
         onRenameChat={handleRenameChat}
         onSaveChatTitle={handleSaveChatTitle}
       />
-      {/* --- ALTERAÇÃO AQUI: Adicionadas as classes w-full e min-w-0 --- */}
       <div className="flex flex-col flex-grow items-center justify-between w-full min-w-0">
         <Header 
           isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onLogout={logout}
         />
         
         {isChatStarted && activeChat.ingredients.length > 0 && (
-          <div className="w-full max-w-2xl mt-4 px-4">
+          // --- ALTERAÇÃO: Espaçamento lateral responsivo ---
+          <div className="w-full max-w-2xl mt-4 px-2 md:px-4">
             <ParametersChips params={activeChat.ingredients} editable={true} onRemove={handleRemoveIngredient} />
           </div>
         )}
 
-        <main ref={mainContainerRef} className="flex flex-col items-center w-full h-full my-4 overflow-y-auto px-4">
+        <main ref={mainContainerRef} className="flex flex-col items-center w-full h-full my-4 overflow-y-auto px-2 md:px-4">
           {!isChatStarted && !isLoading ? (
             <div className="flex flex-col items-center justify-center text-center h-full">
               <div className="flex flex-col items-center justify-center gap-4">
@@ -387,7 +387,8 @@ export function Home() {
           )}
         </main>
 
-        <div className="w-full max-w-2xl mb-2 px-4">
+        {/* --- ALTERAÇÃO: Espaçamento lateral responsivo --- */}
+        <div className="w-full max-w-2xl mb-2 px-2 md:px-4">
           <div className="flex flex-col items-end justify-center gap-4 w-full mt-auto">
              {showContinueButton && (
               <PrimaryButton onClick={handleGenerateRecipes} disabled={isLoading}>
