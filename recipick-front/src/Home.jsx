@@ -30,7 +30,7 @@ export function Home() {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [loadingChatIds, setLoadingChatIds] = useState([]); // Estado para múltiplos loadings
+  const [loadingChatIds, setLoadingChatIds] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const mainContainerRef = useRef(null);
   const [canRegenerate, setCanRegenerate] = useState(false);
@@ -209,7 +209,7 @@ export function Home() {
         return chat;
       }));
     } finally {
-      setLoadingChatIds(prev => prev.filter(id => id !== currentChatId));
+      setLoadingChatIds(prev => prev.filter(id => id !== currentChatId && id !== activeChatId));
     }
   }
   

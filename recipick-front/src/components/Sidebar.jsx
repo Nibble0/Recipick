@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, Bars3Icon, EllipsisVerticalIcon, StarIcon, TrashIcon, Cog6ToothIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
-import clsx from 'clsx'; // Importa a biblioteca clsx para classes condicionais
+import clsx from 'clsx';
 
 function ChatOptionsMenu({ onFavorite, onRemove, onOpenSettings, onRename, isFavorite, isFavoriteDisabled }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -124,7 +124,6 @@ export function Sidebar({
     !chat.isFavorite && chat.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Fecha a sidebar em telas pequenas após selecionar um chat
   const handleSelectChatAndClose = (id) => {
     onSelectChat(id);
     if (window.innerWidth < 1024) { // lg breakpoint
@@ -170,7 +169,6 @@ export function Sidebar({
 
   return (
     <>
-      {}
       {isSidebarOpen && <div
         onClick={() => setIsSidebarOpen(false)}
         className="fixed inset-0 bg-black bg-opacity-30 z-30 lg:hidden"
@@ -178,40 +176,43 @@ export function Sidebar({
       <div 
         ref={sidebarRef}
         className={clsx(
-          'flex flex-col h-full bg-white shadow-lg transition-transform duration-300 ease-in-out z-40',
-          'fixed lg:relative lg:translate-x-0', 
-          'w-72', // Largura fixa
-          { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen }
+          'flex flex-col h-full bg-white shadow-lg transition-all duration-300 ease-in-out',
+          'fixed lg:relative z-40',
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
+          'lg:translate-x-0',
+          isSidebarOpen ? 'w-72' : 'lg:w-0'
         )}
       >
-        <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-bold text-primary-dark">ReciPick</h2>
-          <button onClick={() => setIsSidebarOpen(false)} className="p-1 rounded-md hover:bg-gray-200 lg:hidden">
-            <Bars3Icon className="h-6 w-6" />
-          </button>
-        </div>
-        <div className="p-4">
-          <button
-            onClick={onNewChat}
-            className="w-full flex items-center justify-center gap-2 p-2 rounded-full bg-primary text-light font-semibold mb-4 hover:bg-primary-dark transition-colors"
-          >
-            <PlusIcon className="h-5 w-5" />
-            Fazer novo pedido
-          </button>
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Pesquisar..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-full bg-solid border border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-        </div>
-        <div className="flex-grow overflow-y-auto">
-          {renderChatList(favoriteChats, "Favoritos", "Nenhum favorito.")}
-          {renderChatList(filteredHistoryChats, "Histórico de pedidos", searchTerm ? "Nenhum pedido encontrado." : "Nenhum pedido no histórico.")}
+        <div className={clsx('w-72 h-full flex flex-col flex-shrink-0', !isSidebarOpen && 'lg:hidden')}>
+            <div className="p-4 border-b flex justify-between items-center">
+            <h2 className="text-xl font-bold text-primary-dark">ReciPick</h2>
+            <button onClick={() => setIsSidebarOpen(false)} className="p-1 rounded-md hover:bg-gray-200">
+                <Bars3Icon className="h-6 w-6" />
+            </button>
+            </div>
+            <div className="p-4">
+            <button
+                onClick={onNewChat}
+                className="w-full flex items-center justify-center gap-2 p-2 rounded-full bg-primary text-light font-semibold mb-4 hover:bg-primary-dark transition-colors"
+            >
+                <PlusIcon className="h-5 w-5" />
+                Fazer novo pedido
+            </button>
+            <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="text"
+                placeholder="Pesquisar..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-full bg-solid border border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+            </div>
+            </div>
+            <div className="flex-grow overflow-y-auto">
+            {renderChatList(favoriteChats, "Favoritos", "Nenhum favorito.")}
+            {renderChatList(filteredHistoryChats, "Histórico de pedidos", searchTerm ? "Nenhum pedido encontrado." : "Nenhum pedido no histórico.")}
+            </div>
         </div>
       </div>
     </>
