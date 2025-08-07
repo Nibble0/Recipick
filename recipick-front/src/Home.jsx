@@ -312,6 +312,7 @@ export function Home() {
     }
   };
 
+  // --- ALTERAÇÃO: Adicionar a função que estava faltando ---
   const handleOpenSettings = (chatId) => {
     setEditingChatId(chatId);
   };
@@ -345,13 +346,6 @@ export function Home() {
 
   return (
     <div className="flex h-dvh bg-bg">
-       {/* --- A LÓGICA DO OVERLAY AGORA ESTÁ AQUI --- */}
-       {isSidebarOpen && (
-        <div
-          onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-        />
-       )}
        <Sidebar
         chats={chats} activeChatId={activeChatId} onNewChat={handleNewChat} onSelectChat={handleSelectChat}
         onFavoriteChat={handleFavoriteChat} onRemoveChat={handleRemoveChat} onOpenSettings={handleOpenSettings}
