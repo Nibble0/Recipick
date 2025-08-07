@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, Bars3Icon, EllipsisVerticalIcon, StarIcon, TrashIcon, Cog6ToothIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
-import clsx from 'clsx'; // Importa a biblioteca clsx para classes condicionais
+import clsx from 'clsx';
 
 function ChatOptionsMenu({ onFavorite, onRemove, onOpenSettings, onRename, isFavorite, isFavoriteDisabled }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -124,10 +124,9 @@ export function Sidebar({
     !chat.isFavorite && chat.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Fecha a sidebar em telas pequenas após selecionar um chat
   const handleSelectChatAndClose = (id) => {
     onSelectChat(id);
-    if (window.innerWidth < 1024) { // lg breakpoint
+    if (window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }
   };
@@ -168,25 +167,22 @@ export function Sidebar({
     </div>
   );
 
+  // --- ALTERAÇÃO: Removido o Fragment <> e o <div> do overlay מכאן ---
   return (
-    <>
-      {}
-      {isSidebarOpen && <div
-        onClick={() => setIsSidebarOpen(false)}
-        className="fixed inset-0 bg-black bg-opacity-30 z-30 lg:hidden"
-      />}
-      <div 
-        ref={sidebarRef}
-        className={clsx(
-          'flex flex-col h-full bg-white shadow-lg transition-transform duration-300 ease-in-out z-40',
-          'fixed lg:relative lg:translate-x-0', 
-          'w-72', // Largura fixa
-          { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen }
-        )}
-      >
+    <div 
+      ref={sidebarRef}
+      className={clsx(
+        'flex flex-col h-full bg-white shadow-lg transition-all duration-300 ease-in-out',
+        'fixed lg:relative z-40',
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        'lg:translate-x-0',
+        isSidebarOpen ? 'w-72' : 'lg:w-0'
+      )}
+    >
+      <div className={clsx('w-72 h-full flex flex-col flex-shrink-0', !isSidebarOpen && 'lg:hidden')}>
         <div className="p-4 border-b flex justify-between items-center">
           <h2 className="text-xl font-bold text-primary-dark">ReciPick</h2>
-          <button onClick={() => setIsSidebarOpen(false)} className="p-1 rounded-md hover:bg-gray-200 lg:hidden">
+          <button onClick={() => setIsSidebarOpen(false)} className="p-1 rounded-md hover:bg-gray-200">
             <Bars3Icon className="h-6 w-6" />
           </button>
         </div>
@@ -214,6 +210,6 @@ export function Sidebar({
           {renderChatList(filteredHistoryChats, "Histórico de pedidos", searchTerm ? "Nenhum pedido encontrado." : "Nenhum pedido no histórico.")}
         </div>
       </div>
-    </>
+    </div>
   );
 }
