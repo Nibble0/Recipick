@@ -312,7 +312,6 @@ export function Home() {
     }
   };
 
-  // --- ALTERAÇÃO: Adicionar a função que estava faltando ---
   const handleOpenSettings = (chatId) => {
     setEditingChatId(chatId);
   };
@@ -346,6 +345,12 @@ export function Home() {
 
   return (
     <div className="flex h-dvh bg-bg">
+       {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+        />
+       )}
        <Sidebar
         chats={chats} activeChatId={activeChatId} onNewChat={handleNewChat} onSelectChat={handleSelectChat}
         onFavoriteChat={handleFavoriteChat} onRemoveChat={handleRemoveChat} onOpenSettings={handleOpenSettings}
@@ -355,6 +360,13 @@ export function Home() {
         onSaveChatTitle={handleSaveChatTitle}
       />
       <div className="flex flex-col flex-grow items-center justify-between w-full min-w-0">
+        {chatToEdit && (
+          <SettingsModal
+            isOpen={!!editingChatId} onClose={() => setEditingChatId(null)}
+            settings={chatToEdit.settings} onSettingChange={handleSettingsChange}
+          />
+        )}
+        <RecipeDetail recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />
         <Header 
           isSidebarOpen={isSidebarOpen} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onLogout={logout}
         />

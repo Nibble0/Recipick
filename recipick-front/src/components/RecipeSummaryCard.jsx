@@ -1,78 +1,27 @@
-import React, { useRef, useState } from 'react';
-import { RecipeSummaryCard } from './RecipeSummaryCard';
+import React from 'react';
 
-export function RecipeCarousel({ recipes, onSelectRecipe }) {
-  const carouselRef = useRef(null);
-  const [isDown, setIsDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  if (!Array.isArray(recipes) || recipes.length === 0) {
-    return null;
-  }
-
-  const handleMouseDown = (e) => {
-    setIsDown(true);
-    if (carouselRef.current) {
-      carouselRef.current.classList.add('active');
-      setStartX(e.pageX - carouselRef.current.offsetLeft);
-      setScrollLeft(carouselRef.current.scrollLeft);
-    }
-    setIsDragging(false);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDown(false);
-    if (carouselRef.current) {
-      carouselRef.current.classList.remove('active');
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDown(false);
-    if (carouselRef.current) {
-      carouselRef.current.classList.remove('active');
-    }
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDown || !carouselRef.current) return;
-    e.preventDefault();
-    setIsDragging(true);
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX);
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleCardClick = (recipe) => {
-    if (isDragging) {
-      return;
-    }
-    // Agora a função onSelectRecipe será chamada
-    onSelectRecipe(recipe);
-  };
+export function RecipeSummaryCard({ recipe, onSelect }) {
+  const hasImage = recipe.imagemUrl;
 
   return (
-    <div className="w-full">
-      <p className="text-dark-light mb-4">Beleza! Com base nisso, tenho algumas sugestões:</p>
-      <div
-        className="flex gap-4 overflow-x-auto pb-4 cursor-grab select-none"
-        ref={carouselRef}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-      >
-        {recipes.map((recipe, index) => (
-          <RecipeSummaryCard
-            key={index}
-            recipe={recipe}
-            // --- ALTERAÇÃO AQUI: Passando a função handleCardClick para o onSelect ---
-            onSelect={handleCardClick}
-          />
-        ))}
-      </div>
+    <div
+      onClick={() => onSelect(recipe)}
+      className="relative flex flex-col justify-end w-44 h-44 flex-shrink-0 bg-solid rounded-2xl p-4 cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200 overflow-hidden text-white"
+    >
+      {hasImage ? (
+        <img 
+          src={recipe.imagemUrl} 
+          alt={recipe.titulo}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          onError={(e) => { e.target.style.display = 'none'; }}
+        />
+      ) : (
+        <div className="absolute inset-0 w-full h-full bg-solid-dark z-0"></div>
+      )}
+      
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
+      
+      <h3 className="relative z-20 font-bold text-base line-clamp-3">{recipe.titulo}</h3>
     </div>
   );
 }

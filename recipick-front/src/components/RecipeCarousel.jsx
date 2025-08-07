@@ -49,7 +49,6 @@ export function RecipeCarousel({ recipes, onSelectRecipe }) {
     if (isDragging) {
       return;
     }
-    // Agora a função onSelectRecipe será chamada
     onSelectRecipe(recipe);
   };
 
@@ -68,7 +67,6 @@ export function RecipeCarousel({ recipes, onSelectRecipe }) {
           <RecipeSummaryCard
             key={index}
             recipe={recipe}
-            // --- ALTERAÇÃO AQUI: Passando a função handleCardClick para o onSelect ---
             onSelect={handleCardClick}
           />
         ))}
